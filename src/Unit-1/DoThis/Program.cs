@@ -10,21 +10,16 @@ namespace WinTail
 
         static void Main(string[] args)
         {
-            // initialize MyActorSystem
-            // YOU NEED TO FILL IN HERE
+            MyActorSystem = ActorSystem.Create("MyActorSystem");
 
             PrintInstructions();
+            // If you want to suppress this message set HOCON `akka.suppress - json - serializer - warning` config flag to on
+            
+            var consoleWriterActor = MyActorSystem.ActorOf(Props.Create(() => new ConsoleWriterActor()), "consoleWriterActor");
+            var consoleReaderActor = MyActorSystem.ActorOf(Props.Create(() => new ConsoleReaderActor(consoleWriterActor)), "consoleReaderActor");
 
-            // time to make your first actors!
-            //YOU NEED TO FILL IN HERE
-            // make consoleWriterActor using these props: Props.Create(() => new ConsoleWriterActor())
-            // make consoleReaderActor using these props: Props.Create(() => new ConsoleReaderActor(consoleWriterActor))
+            consoleReaderActor.Tell("please begin");
 
-
-            // tell console reader to begin
-            //YOU NEED TO FILL IN HERE
-
-            // blocks the main thread from exiting until the actor system is shut down
             MyActorSystem.WhenTerminated.Wait();
         }
 
