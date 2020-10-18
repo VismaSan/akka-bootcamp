@@ -13,12 +13,11 @@ namespace WinTail
             MyActorSystem = ActorSystem.Create("MyActorSystem");
 
             PrintInstructions();
-            // If you want to suppress this message set HOCON `akka.suppress - json - serializer - warning` config flag to on
             
             var consoleWriterActor = MyActorSystem.ActorOf(Props.Create(() => new ConsoleWriterActor()), "consoleWriterActor");
             var consoleReaderActor = MyActorSystem.ActorOf(Props.Create(() => new ConsoleReaderActor(consoleWriterActor)), "consoleReaderActor");
 
-            consoleReaderActor.Tell("please begin");
+            consoleReaderActor.Tell(ConsoleReaderActor.StartCommand);
 
             MyActorSystem.WhenTerminated.Wait();
         }
